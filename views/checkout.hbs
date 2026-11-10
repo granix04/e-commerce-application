@@ -1,0 +1,92 @@
+<div class="row justify-content-md-center">
+  <div class="col-6">
+    <div class="text-center mt-40">
+      <h1>
+        Checkout — Stripe Press
+      </h1>
+      <h5 class="text-secondary">
+        {{title}}
+      </h5>
+      <hr class="mt-40">
+      <div class="mt-20 text-info">
+        Total due: $<span class="amount" data-amount="{{amount}}"></span>
+      </div>
+    </div>
+    <div class="card box-shadow mt-40">
+      <div class="card-body">
+        <form name="payment-form" data-secret="{{client_secret}}">
+          <div id="payment-element" class="mt-20">
+            <!-- Elements will create form elements here -->
+          </div>
+          <div id="payment-message" class="mt-20 text-danger" role="alert"></div>
+          <div class="mt-20">
+            <button type="submit" class="btn btn-lg btn-block btn-primary">Pay $<span class="amount" data-amount="{{amount}}"></span></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/**
+ * Author : Alex Lew
+ * Date : 09-11-2026
+ * 
+ * Objective :
+ * 1. To mount the Payment Element and add submit handler to validate the form 
+ * 2. To confirm the payment with the Payment Intent
+ * 3. To handle the error messages from Stripe
+ */
+  const stripe = Stripe('{{publishableKey}}');
+  const form = document.forms['payment-form'];
+  const clientSecret = form.dataset.secret;
+
+  // Initialise the Payment Element
+  const options = {
+    mode: 'payment',
+    currency: 'sgd',
+    amount: {{amount}},
+  };
+  const elements = stripe.elements(options);
+
+  // Mount the Payment Element
+  const paymentElement = elements.create('payment');
+  paymentElement.mount('#payment-element');
+
+  // Submit handler to validate the form and confirm the payment
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    setLoading(true);
+
+    // Trigger form validation
+    const { error: submitError } = await elements.submit();
+    if (submitError) {
+      handleError(submitError);
+      return;
+    }
+
+    // Use clientSecret and Elements instance to confirm the payment
+    const { error } = await stripe.confirmPayment({
+      elements,
+      clientSecret,
+      confirmParams: {
+        return_url: window.location.origin + '/success',
+      },
+    });
+
+    // Gracefully handle errors on Payment Element
+    if (error) {
+      handleError(error);
+    }
+  });
+
+  function handleError(error) {
+    document.getElementById('payment-message').textContent = error.message;
+    setLoading(false);
+  }
+  // Set the spinner to indicate the loading state
+  function setLoading(isLoading) {
+    form.querySelector('button[type="submit"]').disabled = isLoading;
+  }
+</script>

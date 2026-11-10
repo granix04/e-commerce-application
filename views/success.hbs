@@ -1,0 +1,25 @@
+<main>
+  {{#if succeeded}}
+  <div class="mt-40 text-center text-success">
+    <h1>
+      <i class="far fa-check-circle"></i> 
+      Success!
+    </h1>
+  </div>
+  {{/if}}
+  <div class="mt-40 text-center">
+    {{#if succeeded}}
+      <h5 class="text-secondary">{{title}}</h5>
+      <div class="mt-20">
+        Total charged: $<span class="amount" data-amount="{{amount}}"></span>
+      </div>
+      <div class="mt-20">
+        Payment Intent ID: <code>{{paymentIntentId}}</code>
+      </div>
+    {{else}}
+      <div class="mt-20 text-secondary">
+        Payment status: {{status}}
+      </div>
+    {{/if}}
+  </div>
+</main>
