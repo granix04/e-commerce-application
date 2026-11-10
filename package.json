@@ -1,7 +1,7 @@
 {
-  "name": "sa-takehome-project-node",
+  "name": "e-commerce-application",
   "version": "1.0.0",
-  "description": "SA Takehome Project",
+  "description": "Application with payment function",
   "scripts": {
     "start": "node app.js"
   },
