@@ -94,7 +94,7 @@ stripe listen --all-snapshot --forward-to localhost:3000/webhook
 It starts forwarding events to the app's webhook route. The CLI prints a line like this : Ready! Your webhook signing secret is whsec_xxxxxxxxxxxxxxxxxxxx. Copy the secret. Leave this terminal open while you use the app.
 
 ## 3.4 Update `sample.env`
-Rename `sample.env` to `.env` and populate with your Stripe account's sandbox API keys, webhook secret, and save the file.
+Rename `sample.env` to `.env` and populate with your Stripe account's sandbox API keys, webhook secret, and save the file. If there is an error rename the file, please use the terminal on the same folder path and run this command : mv sample.env .env
 
 ```text
 STRIPE_SECRET_KEY=sk_test_xxxxxxxxxxxxxxxxxxxx
